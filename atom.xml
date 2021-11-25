@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2523615279.github.io/</id>
     <title>魔仙堡</title>
-    <updated>2021-11-25T04:32:45.589Z</updated>
+    <updated>2021-11-25T07:59:42.435Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2523615279.github.io/"/>
     <link rel="self" href="https://2523615279.github.io/atom.xml"/>
@@ -10,6 +10,65 @@
     <logo>https://2523615279.github.io/images/avatar.png</logo>
     <icon>https://2523615279.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 魔仙堡</rights>
+    <entry>
+        <title type="html"><![CDATA[elecV2P使用推送]]></title>
+        <id>https://2523615279.github.io/post/elecv2p-shi-yong-tui-song/</id>
+        <link href="https://2523615279.github.io/post/elecv2p-shi-yong-tui-song/">
+        </link>
+        <updated>2021-11-25T06:03:14.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="通知配置地址v2p面板地址setting菜单通知相关">通知配置地址：v2p面板地址,setting菜单,通知相关</h2>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/3ffc6abc1c2a84e3534d824e48ec2895.png" alt="image.png" title="image.png" />
+</blockquote>
+<h2 id="推送方式">推送方式：</h2>
+<blockquote>
+<h3 id="一-telegram通知">一、Telegram通知</h3>
+<blockquote>
+<p><strong>通知链接</strong>：https://api.telegram.org/bot你的botapi/，选择 <strong>POST</strong> 方式</p>
+<p>这里的<strong>botapi</strong>，其实就是你的<strong>bot_token</strong>，就是新建bot时，Botfather发给你的token。</p>
+<p>示例，假如你的<strong>bot_token</strong>是<strong>12345678:NNVDISOEJNBNB1245</strong>，那通知链接如下填写：</p>
+<p>https://api.telegram.org/bot<strong>12345678:NNVDISOEJNBNB1245</strong>/</p>
+<p>如果使用TG反代的话，请使用cloudflare的连接</p>
+<p>示例：https://xxxxx.xxx.workers.dev/botapi/</p>
+<pre><code class="language-json">{
+  &quot;method&quot;: &quot;sendMessage&quot;,
+  &quot;chat_id&quot;: 你的TG userid,
+  &quot;text&quot;: `$title$\n$body$\n$url$`
+}
+</code></pre>
+<img src="https://pic.rmb.bdstatic.com/bjh/2f64de64e1402aa503b837ee9c96b36b.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+<blockquote>
+<h3 id="二-pushplus通知">二、pushplus通知</h3>
+<blockquote>
+<p>pushplus官网：<a href="http://www.pushplus.plus/send">http://www.pushplus.plus</a></p>
+<pre><code class="language-json">{
+ &quot;token&quot;: `xxx`,
+ &quot;title&quot;: `$title$`,
+ &quot;content&quot;: `$body$\n$url$`,
+ &quot;Content-Type&quot;: `application/json`
+}
+</code></pre>
+<p>注：token在pushplus官网获得</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<h3 id="三-server酱">三、server酱</h3>
+<blockquote>
+<p>server酱官网： <a href="http://sc.ftqq.com/SCKEY.send">http://sc.ftqq.com</a></p>
+<p><strong>通知链接</strong>： http://sc.ftqq.com/SCKEY.send， 选择 <strong>POST</strong> 方式</p>
+<pre><code class="language-json">{
+ &quot;text&quot;: `$title$`,
+ &quot;desp&quot;: `$body$可以随便加点自定义文字[链接]($url$)`
+}
+</code></pre>
+<p>注：sckey在官网获得</p>
+</blockquote>
+</blockquote>
+<p>本文参考：https://www.kejiwanjia.com/jiaocheng/zheteng/notes/26176.html</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[CloudFlare Worker 反代TGbot]]></title>
         <id>https://2523615279.github.io/post/cloudflare-worker-fan-dai-tgbot/</id>
