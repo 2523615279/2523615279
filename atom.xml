@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2523615279.github.io/</id>
     <title>魔仙堡</title>
-    <updated>2021-11-25T01:04:42.391Z</updated>
+    <updated>2021-11-25T03:08:21.571Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2523615279.github.io/"/>
     <link rel="self" href="https://2523615279.github.io/atom.xml"/>
@@ -10,6 +10,128 @@
     <logo>https://2523615279.github.io/images/avatar.png</logo>
     <icon>https://2523615279.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 魔仙堡</rights>
+    <entry>
+        <title type="html"><![CDATA[CloudFlare Worker 反代TGbot]]></title>
+        <id>https://2523615279.github.io/post/cloudflare-worker-fan-dai-tgbot/</id>
+        <link href="https://2523615279.github.io/post/cloudflare-worker-fan-dai-tgbot/">
+        </link>
+        <updated>2021-11-25T01:23:42.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="开始前的准备">开始前的准备</h2>
+<blockquote>
+<h3 id="一-注册一个tg机器人">一、注册一个TG机器人</h3>
+<blockquote>
+<p>1、在TG搜索@BotFather</p>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/940d2b7755daa351678dd00eccb6324c.png" alt="image.png" title="image.png" />
+</blockquote>
+<p>2、点击进去，点击开始</p>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/733d06b91d7de266c57bb2d2d4d4ef41.png" alt="image.png" title="image.png" />
+</blockquote>
+<p>3、点击右下角的斜杠，点击newbot</p>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/dcbccf03269709f34a9e52f5e140617f.png" alt="image.png" title="image.png" />
+<img src="https://pic.rmb.bdstatic.com/bjh/9f85587f2343320b38191065562eef51.png" alt="image.png" title="image.png" />
+</blockquote>
+<p>4、点击过后就会让你输入机器人的名字和用来查找机器人的id（后面那个只能输入英文)</p>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/ec11f3be41d2bc5e58164ded1157bf2c.png" alt="image.png" title="image.png" />
+<img src="https://pic.rmb.bdstatic.com/bjh/a1950c95fdc5f2ec626880224e124ba9.png" alt="image.png" title="image.png" />
+这个bot token复制好，后面要用到
+</blockquote>
+</blockquote>
+</blockquote>
+<h2 id="一-注册cloudflare">一、注册CloudFlare</h2>
+<blockquote>
+<p>cloudflare官网:<a href="https://www.cloudflare.com/zh-cn/">https://www.cloudflare.com/zh-cn/</a><br>
+如果不能打开官网的话，请打开vpn然后打开官网。</p>
+</blockquote>
+<h2 id="二-登录启用cloudflare-worker">二、登录启用CloudFlare Worker</h2>
+<blockquote>
+<h3 id="1-登录cloudflare后在左上角下拉菜单中找到-workers">1、登录cloudflare后，在左上角下拉菜单中找到 workers。</h3>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/7eeb721360b30fe78a7f05e18d6c6076.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+<blockquote>
+<h3 id="2-设置一个自定义的子域">2、设置一个自定义的子域</h3>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/48ec9eb745a6fd3fa31d6469ea92b369.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+<blockquote>
+<h3 id="3-根据自身情况选择合适的计划我这边免费的就够用了">3、根据自身情况选择合适的计划，我这边免费的就够用了。</h3>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/d85d72e2fa0aa7d9f26cf012f4e718da.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+<h2 id="三-配置worker">三、配置worker</h2>
+<blockquote>
+<h3 id="1-点击确认计划后即可进入cf的workers后台点击-创建worker-按钮新建一个worker">1、点击确认计划后，即可进入cf的workers后台，点击 创建worker 按钮，新建一个worker。</h3>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/048ba44295646426b3250633ef4f3899.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+<blockquote>
+<h3 id="2-进入worker编辑界面输入下面代码后点击安装部署">2、进入worker编辑界面，输入下面代码后，点击安装部署。</h3>
+</blockquote>
+<pre><code class="language-const">const tg_host = &quot;api.telegram.org&quot;;
+addEventListener('fetch', event =&gt; {
+    event.respondWith(handleRequest(event.request))
+})
+function validate(path) {
+    for (var i = 0; i &lt; whitelist.length; i++) {
+        if (path.startsWith(whitelist[i]))
+            return true;
+    }
+    return false;
+}
+async function handleRequest(request) {
+    var u = new URL(request.url);
+    u.host = tg_host;
+    if (!validate(u.pathname))
+        return new Response('Unauthorized', {
+            status: 403
+        });
+    var req = new Request(u, {
+        method: request.method,
+        headers: request.headers,
+        body: request.body
+    });
+    const result = await fetch(req);
+    return result;
+} 
+</code></pre>
+<blockquote>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/f0918c8c38652580fd750bfbd1052ef9.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+<h2 id="四-测试反代成功没">四、测试反代成功没</h2>
+<h3 id="1-测试前的准备">1、测试前的准备</h3>
+<blockquote>
+<h4 id="获取用户id">获取用户id:</h4>
+<blockquote>
+<p>tg搜索 @userinfobot，关注一个关注量较多头像有问号的即可。<br>
+<img src="https://pic.rmb.bdstatic.com/bjh/c6a29dc1490659e4cc3948ac8d8549ea.png" alt="image.png" title="image.png" /></p>
+</blockquote>
+</blockquote>
+<h3 id="开始测试">开始测试</h3>
+<blockquote>
+<p>设置成功后即可通过 <code>https://xxxxx.xxx.workers.dev</code> 推送特定信息给特定的用户或群组，链接为worker的链接地址<br>
+可以通过<code>https://xxxxx.xxx.workers.dev/bot88888:aaaaa/sendMessage?chat_id=7777&amp;text=yyyy</code> 测试，如果配置正常将能收到推送信息。<br>
+将代码中的88888:aaaaa改为自己机器人的token，777改为对话用户id，yyyyy改为要发送的文本。<br>
+测试成功的图片：</p>
+<blockquote>
+<blockquote>
+<img src="https://pic.rmb.bdstatic.com/bjh/9e7bcfd50447643e5ac99c85d6dc9098.png" alt="image.png" title="image.png" />
+<img src="https://pic.rmb.bdstatic.com/bjh/e325ac52178be48abf333b3e2bd3fc33.png" alt="image.png" title="image.png" />
+</blockquote>
+</blockquote>
+</blockquote>
+<p>本文参考：https://www.kejiwanjia.com/jiaocheng/server/5221.html#3worker</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[中青看点]]></title>
         <id>https://2523615279.github.io/post/zhong-qing-kan-dian/</id>
